@@ -1,60 +1,24 @@
-	@startuml
-class CourseData [[java:observer.pattern.CourseData]] {
-	-Vector<CourseRecord> courseData
-	+CourseData()
-	+void addCourseRecord(CourseRecord courseRecord)
-	+void changeCourseRecord(String subjectName, int numOfStudents)
-	+Vector<CourseRecord> getUpdate()
-}
-class Observable [[java:observer.pattern.Observable]] {
-}
-Observable <|-- CourseData
-abstract class Observable [[java:observer.pattern.Observable]] {
-	#Vector<Observer> observers
-	+Observable()
-	+void attach(Observer o)
-	+void detach(Observer o)
-	+void notifyObservers()
-	+{abstract}Object getUpdate()
-}
-interface Observer [[java:observer.pattern.Observer]] {
-	void update(Observable o)
-}
-class BarChartObserver [[java:observer.pattern.BarChartObserver]] {
-	-Vector<CourseRecord> courseData
-	+BarChartObserver(CourseData data)
-	+void paint(Graphics g)
-	+void update(Observable o)
-}
-class JPanel {
-}
-JPanel <|-- BarChartObserver
-interface Observer [[java:observer.pattern.Observer]] {
-}
-Observer <|.. BarChartObserver
-class CourseController [[java:observer.pattern.CourseController]] {
-	-Vector<JSlider> sliders
+@startuml
+class CourseViewer [[java:observer.nonpattern.CourseViewer]] {
+	-JPanel sliderPanel
 	-JPanel coursePanel
-	+CourseController(CourseData courses)
-	+void addCourse(CourseRecord record)
-	+void update(Observable o)
+	-Vector<JSlider> sliders
+	-JScrollPane scrollPane
+	-JButton button
+	+CourseViewer()
+	+void addCourse(CourseRecord courseRecord)
+	+void paint(Graphics g)
 	+void actionPerformed(ActionEvent arg0)
 	+void stateChanged(ChangeEvent arg0)
 	+{static}void main(String[] args)
 }
-class CourseData [[java:observer.pattern.CourseData]] {
+class JFrame [[java:javax.swing.JFrame]] {
 }
-CourseController --> "1" CourseData : courseData
-class JPanel {
+JFrame <|-- CourseViewer
+interface ActionListener [[java:java.awt.event.ActionListener]] {
 }
-JPanel <|-- CourseController
-interface Observer [[java:observer.pattern.Observer]] {
+ActionListener <|.. CourseViewer
+interface ChangeListener [[java:javax.swing.event.ChangeListener]] {
 }
-Observer <|.. CourseController
-interface ChangeListener {
-}
-ChangeListener <|.. CourseController
-interface ActionListener {
-}
-ActionListener <|.. CourseController
+ChangeListener <|.. CourseViewer
 @enduml

@@ -60,7 +60,7 @@ public class BarChartObserver extends JPanel implements Observer {
 							* LayoutConstants.barSpacing + i
 							* LayoutConstants.barWidth, LayoutConstants.yOffset
 							+ LayoutConstants.graphHeight + 20);
-		}
+		}	
 	}
 
 	/**

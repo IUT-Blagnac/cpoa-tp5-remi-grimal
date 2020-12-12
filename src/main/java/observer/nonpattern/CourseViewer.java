@@ -143,29 +143,37 @@ public class CourseViewer extends JFrame implements ActionListener,
 							- LayoutConstants.barHeight + 2
 							* (LayoutConstants.maxValue - record.getValue()),
 					LayoutConstants.barWidth, 2 * record.getValue());
-			g.setColor(Color.red);
 			g.drawString(record.getName(),
 					LayoutConstants.xOffset + (i + 1)
 							* LayoutConstants.barSpacing + i
 							* LayoutConstants.barWidth, LayoutConstants.yOffset
 							+ LayoutConstants.graphHeight + 20);
 		}
+		
 		int radius = 100;
-		// first compute the total number of students
+		
+		Integer[] data = new Integer[sliders.size()];
+
+		//first compute the total number of students
 		double total = 0.0;
-		for (int i = 0; i < sliders.size(); i++) {
-			total += sliders.elementAt(i).getValue();
+		for (int i = 0; i < data.length; i++) {
+			data[i] = sliders.elementAt(i).getValue();
+			total += data[i];
 		}
-		// if total == 0 nothing to draw
+		//if total == 0 nothing to draw
 		if (total != 0) {
 			double startAngle = 0.0;
-			for (int i = 0; i < sliders.size(); i++) {
-				double ratio = (sliders.elementAt(i).getValue() / total) * 360.0;
-				// draw the arc
-				g.setColor(LayoutConstants.courseColours[i % LayoutConstants.courseColours.length]);
-				g.fillArc(LayoutConstants.xOffset, LayoutConstants.yOffset + 300, 2 * radius, 2 * radius,
-						(int) startAngle, (int) ratio);
+			for (int i = 0; i < data.length; i++) {
+				double ratio = (data[i] / total) * 360.0;
+				//draw the arc
+				g.setColor(LayoutConstants.courseColours[i%LayoutConstants.courseColours.length]);
+				g.fillArc(LayoutConstants.xOffset, LayoutConstants.yOffset + 300, 2 * radius, 2 * radius, (int) startAngle, (int) ratio);
 				startAngle += ratio;
+				g.drawString(sliders.elementAt(i).getName(),
+						LayoutConstants.xOffset + (i + 1)
+								* LayoutConstants.barSpacing + i
+								* LayoutConstants.barWidth, LayoutConstants.yOffset
+								+ LayoutConstants.graphHeight + 20);
 			}
 		}
 	}

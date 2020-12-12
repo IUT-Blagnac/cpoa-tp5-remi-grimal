@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -26,6 +27,9 @@ import observer.CourseRecord;
  */
 @SuppressWarnings("serial")
 public class CourseController extends JPanel implements Observer, ChangeListener, ActionListener {
+	
+	ArrayList<ObserverType> Types = new ArrayList<>();
+	
 	/**
 	 * Constructs a CourseController object
 	 * 
@@ -44,6 +48,8 @@ public class CourseController extends JPanel implements Observer, ChangeListener
 
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.BOTH;
+		Types.add(ObserverType.CREATE);
+		Types.add(ObserverType.REMOVE);
 		courses.attach(this);
 		Vector<CourseRecord> state = courses.getUpdate();
 
@@ -98,13 +104,33 @@ public class CourseController extends JPanel implements Observer, ChangeListener
 	 * @param o
 	 *            the CourseData subject that has changed
 	 */
-	 public void update(Observable o) {
+	public void update(Observable o) {
 		CourseData courses = (CourseData) o;
 		Vector<CourseRecord> newCourses = courses.getUpdate();
 		for (int i = sliders.size(); i < newCourses.size(); i++) {
 			this.addCourse((CourseRecord) newCourses.elementAt(i));
 		}
 	} 
+
+	/**
+	 * Informs this CourseController that a new course has been added
+	 *
+	 * @param o the CourseData subject that has changed
+	 */
+	public void update(Object o) {
+		CourseRecord record = (CourseRecord) o;
+
+		for (JSlider slider : sliders)
+			if (slider.getName().equals(record.getName()))
+				return;
+
+		this.addCourse(record);
+	}
+	
+	@Override
+	public ArrayList<ObserverType> getTypes() {
+		return Types;
+	}
 
 	/**
 	 * Manages the creation of a new course. Called when the "New Course" button is pressed.

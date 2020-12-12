@@ -40,8 +40,8 @@ public class CourseData extends Observable {
 		}
 		if (!alreadyExists)
 			this.courseData.addElement(courseRecord);
-		this.notifyObservers();
-	}
+		this.notifyObservers(courseRecord);
+		}
 
 	/**
 	 * Update an existing CourseRecord object
@@ -59,7 +59,10 @@ public class CourseData extends Observable {
 				i = courseData.size();
 			}
 		}
-		this.notifyObservers();
+		
+		for (CourseRecord record : courseData)
+			if (record.getName().equals(subjectName))
+				this.notifyObservers(record);
 	}
 
 	/**
